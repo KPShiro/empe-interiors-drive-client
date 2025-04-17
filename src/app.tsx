@@ -1,7 +1,5 @@
-import RemoveMe from '@components/remove-me';
-
 function App() {
-    return <RemoveMe />;
+    return <div>APP WORKS</div>;
 }
 
 export default App;
