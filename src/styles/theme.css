@@ -21,6 +21,10 @@
     --color-surface-1: var(--color-gray-200);
     --color-on-surface-1: var(--color-on-surface-0);
 
+    --outline-color: var(--color-on-surface-0);
+    --outline-offset: 3px;
+    --outline-width: 2px;
+
     /* Component Tokens */
     --border-color-default: var(--color-gray-700);
     --border-width: 1px;

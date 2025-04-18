@@ -1,9 +1,9 @@
 import * as Sentry from '@sentry/react';
-import { StrictMode } from 'react';
+import '@styles/index.css';
 import { createRoot } from 'react-dom/client';
-import App from './app.tsx';
+import { RouterProvider } from 'react-router';
+import { router } from './routes.tsx';
 import './sentry-init.ts';
-import './styles/index.css';
 
 const rootElement = document.getElementById('root');
 
@@ -19,8 +19,4 @@ const root = createRoot(rootElement, {
     onRecoverableError: Sentry.reactErrorHandler(),
 });
 
-root.render(
-    <StrictMode>
-        <App />
-    </StrictMode>
-);
+root.render(<RouterProvider router={router} />);
