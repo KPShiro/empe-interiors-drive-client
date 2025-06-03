@@ -9,7 +9,12 @@
         "baseUrl": ".",
         "paths": {
             "@assets/*": ["./src/assets/*"],
-            "@components/*": ["./src/components/*"]
+            "@components/*": ["./src/components/*"],
+            "@config/*": ["./src/config/*"],
+            "@hooks/*": ["./src/hooks/*"],
+            "@models/*": ["./src/models/*"],
+            "@utils/*": ["./src/utils/*"],
+            "@state/*": ["./src/state/*"]
             // Add more paths here...
         },
 

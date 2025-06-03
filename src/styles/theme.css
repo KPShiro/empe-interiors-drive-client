@@ -3,25 +3,29 @@
     /* Add primary/atomic Design Tokens here */
 
     /* System Tokens */
-    --color-primary: var(--color-blue-600);
-    --color-on-primary: var(--color-blue-50);
+    --color-primary: var(--color-violet-700);
+    --color-on-primary: var(--color-violet-50);
 
-    --color-danger: var(--color-red-300);
-    --color-on-danger: var(--color-red-900);
+    --color-danger: var(--color-red-500);
+    --color-on-danger: var(--color-red-50);
 
-    --color-warning: var(--color-yellow-300);
-    --color-on-warning: var(--color-yellow-900);
+    --color-warning: var(--color-yellow-400);
+    --color-on-warning: var(--color-yellow-950);
 
-    --color-success: var(--color-green-300);
-    --color-on-success: var(--color-green-900);
+    --color-success: var(--color-green-500);
+    --color-on-success: var(--color-green-950);
 
-    --color-surface-0: var(--color-gray-100);
+    --color-surface-0: var(--color-gray-200);
     --color-on-surface-0: var(--color-gray-800);
+    --color-on-surface-0-variant: var(--color-gray-400);
 
-    --color-surface-1: var(--color-gray-200);
-    --color-on-surface-1: var(--color-on-surface-0);
+    --color-surface-1: var(--color-gray-100);
+    --color-on-surface-1: var(--color-gray-800);
+    --color-on-surface-1-variant: var(--color-gray-400);
+
+    --color-border: var(--color-gray-300);
 
     /* Component Tokens */
-    --border-color-default: var(--color-gray-700);
+    --border-color-default: var(--color-border);
     --border-width: 1px;
 }
