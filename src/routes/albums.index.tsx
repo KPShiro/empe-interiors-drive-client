@@ -11,7 +11,7 @@ export const Route = createFileRoute('/albums/')({
 function AlbumsPage() {
     const albums = useGetAlbums();
 
-    if (albums.isLoading || !albums.data) {
+    if (albums.isLoading) {
         return (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {Array.from({ length: 8 }).map((_, index) => (
@@ -23,6 +23,18 @@ function AlbumsPage() {
                         </div>
                     </div>
                 ))}
+            </div>
+        );
+    }
+
+    if (albums.isError || !albums.data) {
+        return (
+            <div className="text-danger bg-danger/10 flex flex-col gap-1 rounded-md p-6">
+                <div className="text-base font-medium">Wystąpił błąd podczas ładowania albumów</div>
+                <div className="text-sm text-current/60">
+                    Spróbuj ponownie za chwilę lub skontaktuj się z administratorem, jeśli problem
+                    będzie się powtarzał.
+                </div>
             </div>
         );
     }
