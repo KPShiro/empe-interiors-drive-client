@@ -18,5 +18,6 @@ export const useGetAlbum = (params: UseGetAlbumsParams) => {
     return useQuery({
         queryKey: ['albums', params.id],
         queryFn: () => getAlbumById(params.id),
+        retry: 1,
     });
 };

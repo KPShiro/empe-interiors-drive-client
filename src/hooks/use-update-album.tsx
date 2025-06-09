@@ -23,15 +23,28 @@ function updateAlbum(
     return fetcher(url, options);
 }
 
-export const useUpdateAlbum = () => {
+export type UseUpdateAlbumOptions = {
+    onSuccess?: () => void;
+    onError?: (error: Error) => void;
+};
+
+export const useUpdateAlbum = (options: UseUpdateAlbumOptions = {}) => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (params: UpdateAlbumParms) => {
             return updateAlbum(params.albumId, params.update);
         },
-        onSuccess: () => {
-            return queryClient.invalidateQueries({ queryKey: ['albums'] });
+        onSuccess: async (_, variables) => {
+            await queryClient.invalidateQueries({ queryKey: ['albums'], exact: true });
+            await queryClient.invalidateQueries({
+                queryKey: ['albums', variables.albumId],
+                exact: true,
+            });
+            options.onSuccess?.();
+        },
+        onError: (error) => {
+            options.onError?.(error);
         },
     });
 };

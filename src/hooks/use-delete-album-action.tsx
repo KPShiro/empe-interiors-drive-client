@@ -1,10 +1,12 @@
 import { useCallback } from 'react';
-import { useDeleteAlbum } from './use-delete-album';
+import { useDeleteAlbum, UseDeleteAlbumOptions } from './use-delete-album';
 import { TrashIcon } from 'lucide-react';
 import { Album } from '@models/album';
 
-export const useDeleteAlbumAction = () => {
-    const { mutate } = useDeleteAlbum();
+type UseDeleteAlbumActionOptions = UseDeleteAlbumOptions;
+
+export const useDeleteAlbumAction = (options: UseDeleteAlbumActionOptions = {}) => {
+    const { mutate } = useDeleteAlbum({ ...options });
 
     const handleExecute = useCallback(
         (albumId: Album['id']) => {

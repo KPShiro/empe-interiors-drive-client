@@ -21,15 +21,24 @@ function createAlbum(title: string, images: File[]): Promise<void> {
     return fetcher(url, options);
 }
 
-export const useCreateAlbum = () => {
+export type UseCreateAlbumOptions = {
+    onSuccess?: () => void;
+    onError?: (error: Error) => void;
+};
+
+export const useCreateAlbum = (options: UseCreateAlbumOptions = {}) => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: ({ title, images }: { title: string; images: File[] }) => {
             return createAlbum(title, images);
         },
-        onSuccess: () => {
-            return queryClient.invalidateQueries({ queryKey: ['albums'] });
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['albums'], exact: true });
+            options.onSuccess?.();
+        },
+        onError: (error) => {
+            options.onError?.(error);
         },
     });
 };

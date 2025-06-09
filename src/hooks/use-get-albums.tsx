@@ -22,5 +22,6 @@ export const useGetAlbums = (params: UseGetAlbumsParams = {}) => {
     return useQuery({
         queryKey: ['albums'],
         queryFn: () => getAlbums(params.limit),
+        retry: 1,
     });
 };

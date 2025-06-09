@@ -14,13 +14,22 @@ function deleteAlbum(albumId: Album['id']): Promise<void> {
     return fetcher(url, options);
 }
 
-export const useDeleteAlbum = () => {
+export type UseDeleteAlbumOptions = {
+    onSuccess?: () => void;
+    onError?: (error: Error) => void;
+};
+
+export const useDeleteAlbum = (options: UseDeleteAlbumOptions = {}) => {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (albumId: string) => deleteAlbum(albumId),
-        onSuccess: () => {
-            return queryClient.invalidateQueries({ queryKey: ['albums'] });
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ['albums'], exact: true });
+            options.onSuccess?.();
+        },
+        onError: (error) => {
+            options.onError?.(error);
         },
     });
 };
