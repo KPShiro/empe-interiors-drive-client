@@ -3,6 +3,8 @@ import { AlbumCard } from '@components/album/album-card';
 import { useGetAlbums } from '@hooks/use-get-albums';
 import { Skeleton } from '@components/skeleton';
 import { CreateAlbumButton } from '@components/create-album/create-album-button';
+import { PageTitle } from '@components/page/page-title';
+import { PageDescription } from '@components/page/page-description';
 
 export const Route = createFileRoute('/albums/')({
     component: AlbumsPage,
@@ -42,18 +44,25 @@ function AlbumsPage() {
     return (
         <>
             <CreateAlbumButton />
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                {albums.data.map((album) => (
-                    <AlbumCard
-                        key={album.id}
-                        id={album.id}
-                        title={album.title}
-                        createdAt={album.createdAt}
-                        imagesCount={album.images.length}
-                        thumbnailUrl={album.images[0]?.url}
-                    />
-                ))}
-            </div>
+            {albums.data.length > 0 ? (
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                    {albums.data.map((album) => (
+                        <AlbumCard
+                            key={album.id}
+                            id={album.id}
+                            title={album.title}
+                            createdAt={album.createdAt}
+                            imagesCount={album.images.length}
+                            thumbnailUrl={album.images[0]?.url}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col gap-2">
+                    <PageTitle text="Utwórz swój pierwszy album" />
+                    <PageDescription text="Wygląda na to, że nie masz jeszcze żadnych albumów w swojej kolecji. Wszystkie utworzone albumy będą widoczne na tej stronie." />
+                </div>
+            )}
         </>
     );
 }
