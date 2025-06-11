@@ -4,14 +4,14 @@ import { cn } from '@utils/cn';
 import { GhostButton } from './button/ghost-button';
 
 const Overlay = () => {
-    return <RadixDialog.Overlay className="fixed inset-0 z-40 bg-black/25 backdrop-blur-sm" />;
+    return <RadixDialog.Overlay className="fixed inset-0 bg-black/25 backdrop-blur-sm" />;
 };
 
 type ContainerProps = React.ComponentProps<typeof RadixDialog.Content>;
 
 const Container = ({ className, ...props }: ContainerProps) => {
     return (
-        <div className="fixed top-1/2 left-1/2 isolate z-50 flex w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center p-4">
+        <div className="fixed top-1/2 left-1/2 isolate flex w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center p-4">
             <RadixDialog.Content
                 {...props}
                 className={cn(
