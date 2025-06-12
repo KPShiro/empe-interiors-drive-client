@@ -1,83 +1,51 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
-import { FileInputItem } from './file-input-item';
-import { cn } from '@utils/cn';
 import { Icon } from '@components/icon';
+import { cn } from '@utils/cn';
 import { PlusIcon } from 'lucide-react';
+import { useRef } from 'react';
 
-type FileInputProps = {
+type FileInputProps = React.ComponentProps<'input'> & {
     value?: File[];
     onValueChange?: (files: File[]) => void;
-    ref?: RefObject<HTMLInputElement | null>;
-} & Omit<React.ComponentProps<'input'>, 'value'>;
+};
 
-export const FileInput = ({ value, onValueChange, ...htmlInputProps }: FileInputProps) => {
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [files, setFiles] = useState<File[]>([]);
+export const FileInput = ({ value, onValueChange, className, ...props }: FileInputProps) => {
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        setFiles(value ?? []);
-    }, [value]);
+    const handleOnValueChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
 
-    useEffect(() => {
-        onValueChange?.(files);
-    }, [files, onValueChange]);
+        if (!files) return;
 
-    const handleOnValueChanged: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-        const selectedFiles = event.target.files;
-        if (!selectedFiles) return;
+        onValueChange?.([...files]);
 
-        const newFiles = Array.from(selectedFiles);
-        const uniqueFiles = newFiles.filter((newFile) => {
-            return !files.some(
-                (existingFile) =>
-                    existingFile.name === newFile.name &&
-                    existingFile.size === newFile.size &&
-                    existingFile.type === newFile.type
-            );
-        });
-
-        setFiles((prev) => [...prev, ...uniqueFiles]);
-
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
+        if (inputRef.current) {
+            inputRef.current.value = '';
         }
     };
 
-    const handleRemoveFile = (index: number) => {
-        const updatedFiles = [...files];
-        updatedFiles.splice(index, 1);
-        setFiles(updatedFiles);
-    };
-
     return (
-        <div className={cn('flex flex-col gap-4', htmlInputProps.className)}>
+        <>
             <input
-                {...htmlInputProps}
-                ref={fileInputRef}
+                {...props}
+                ref={inputRef}
+                value={value}
                 type="file"
-                onChange={handleOnValueChanged}
                 className="hidden"
+                onChange={handleOnValueChanged}
             />
-            <div
-                className="flex h-10 cursor-pointer justify-between items-center gap-3 rounded-md border px-3"
-                onClick={() => fileInputRef.current?.click()}
+            <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className={cn(
+                    'flex h-10 w-full cursor-pointer items-center justify-between rounded-md border px-3',
+                    'focus-visible:outline-primary/15 focus-visible:border-primary focus-visible:outline-4',
+                    'disabled:cursor-not-allowed disabled:opacity-25',
+                    className
+                )}
             >
-                <div className="text-sm font-medium">
-                    {htmlInputProps.placeholder ?? 'Add files'}
-                </div>
+                <div className="text-sm">{props.placeholder ?? 'Dodaj pliki'}</div>
                 <Icon icon={PlusIcon} />
-            </div>
-            {files.length > 0 ? (
-                <div className="bg-surface-0 flex flex-col gap-1 rounded-md border p-1">
-                    {files.map((file, index) => (
-                        <FileInputItem
-                            key={index}
-                            file={file}
-                            onRemove={() => handleRemoveFile(index)}
-                        />
-                    ))}
-                </div>
-            ) : null}
-        </div>
+            </button>
+        </>
     );
 };

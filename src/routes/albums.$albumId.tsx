@@ -8,6 +8,11 @@ import { useGetAlbum } from '@hooks/use-get-album';
 import { createFileRoute, useNavigate, useParams } from '@tanstack/react-router';
 import { formatDateTime } from '@utils/format-datetime';
 import { ArrowLeftIcon } from 'lucide-react';
+import { SortableItem } from '@components/sortable/sortable-item';
+import { useEffect, useState } from 'react';
+import { AlbumImage } from '@models/album';
+import { useReorderImages } from '@hooks/use-reorder-images';
+import { SortableGrid } from '@components/sortable/sortable-grid';
 
 export const Route = createFileRoute('/albums/$albumId')({
     component: RouteComponent,
@@ -17,6 +22,16 @@ function RouteComponent() {
     const { albumId } = useParams({ from: Route.id });
     const albumQuery = useGetAlbum({ id: albumId });
     const album = albumQuery.data;
+
+    const [images, setImages] = useState<AlbumImage[]>([]);
+
+    const reorderImages = useReorderImages();
+
+    useEffect(() => {
+        if (!album) return;
+
+        setImages(album.images);
+    }, [album]);
 
     const navigate = useNavigate();
 
@@ -28,6 +43,13 @@ function RouteComponent() {
 
     const navigateBack = () => {
         void navigate({ to: '/albums' });
+    };
+
+    const handleReorderImages = (sortedItems: AlbumImage[]) => {
+        setImages(sortedItems);
+
+        const imageIds = sortedItems.map((item) => item.id);
+        reorderImages.mutate({ albumId, imageIds });
     };
 
     if (albumQuery.isLoading) {
@@ -81,14 +103,25 @@ function RouteComponent() {
                 />
             </div>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-4">
-                {album.images.map((image) => (
-                    <div key={image.id} className="group overflow-clip rounded-md">
-                        <img
-                            src={image.url}
-                            className="aspect-square size-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                    </div>
-                ))}
+                <SortableGrid
+                    items={images}
+                    itemIdKey={'id'}
+                    itemsKeys={images.map((image) => image.id)}
+                    onListSorted={handleReorderImages}
+                >
+                    {images.map((image) => (
+                        <SortableItem key={image.id} id={image.id}>
+                            <SortableItem.Handle>
+                                <div className="group overflow-clip rounded-md">
+                                    <img
+                                        src={image.url}
+                                        className="aspect-square size-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                </div>
+                            </SortableItem.Handle>
+                        </SortableItem>
+                    ))}
+                </SortableGrid>
             </div>
         </>
     );

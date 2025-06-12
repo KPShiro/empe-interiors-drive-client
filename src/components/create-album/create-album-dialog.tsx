@@ -1,5 +1,4 @@
 import * as Dialog from '@components/dialog';
-import { FileInput } from '@components/input/file-input';
 import { FormFieldset } from '@components/form/form-fieldset';
 import { FormLabel } from '@components/form/form-label';
 import { TextInput } from '@components/input/text-input';
@@ -8,7 +7,7 @@ import { FilledButton } from '@components/button/filled-button';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormHint } from '@components/form/form-hint';
+import { ImageInput } from '@components/input/image-input';
 
 const MAX_FILE_SIZE_MB = 5;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -69,19 +68,14 @@ export const CreateAlbumDialog = () => {
                             name="images"
                             render={({ field }) => (
                                 <FormFieldset>
-                                    <div className="flex flex-col gap-0.5">
-                                        <FormLabel htmlFor="files">Zdjęcia</FormLabel>
-                                        <FormHint>
-                                            Kolejność zdjęć na stronie będzie taka sama jak poniżej.
-                                        </FormHint>
-                                    </div>
-                                    <FileInput
-                                        multiple
+                                    <FormLabel htmlFor="files">Zdjęcia</FormLabel>
+                                    <ImageInput
                                         id="files"
-                                        max={MAX_FILE_SIZE_BYTES}
-                                        onValueChange={field.onChange}
                                         placeholder="Dodaj zdjęcia"
+                                        multiple
+                                        max={MAX_FILE_SIZE_BYTES}
                                         accept={ALLOWED_IMAGE_TYPES.join(',')}
+                                        onValueChange={field.onChange}
                                     />
                                 </FormFieldset>
                             )}
