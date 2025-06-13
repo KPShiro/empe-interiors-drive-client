@@ -24,7 +24,7 @@ export const Icon = ({ icon, size = 'md', className, ...props }: IconProps) => {
             case 'sm':
                 return 14;
             case 'lg':
-                return 24;
+                return 20;
             case 'md':
             default:
                 return 16;

@@ -4,10 +4,10 @@
 
     /* System Tokens */
     --color-primary: var(--color-violet-700);
-    --color-on-primary: var(--color-violet-50);
+    --color-on-primary: var(--color-white);
 
     --color-danger: var(--color-red-500);
-    --color-on-danger: var(--color-red-50);
+    --color-on-danger: var(--color-white);
 
     --color-warning: var(--color-yellow-400);
     --color-on-warning: var(--color-yellow-950);

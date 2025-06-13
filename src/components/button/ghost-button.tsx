@@ -2,11 +2,13 @@ import React, { RefObject } from 'react';
 import { cn } from '@utils/cn';
 import { Icon } from '@components/icon';
 import { LoaderIcon } from 'lucide-react';
-import { ButtonSize } from './constats';
+import {
+    ButtonContentLayoutClassName,
+    ButtonIconSize,
+    ButtonSize,
+    ButtonVariant,
+} from './constats';
 import { cva, VariantProps } from 'class-variance-authority';
-
-export const ButtonVariants = ['neutral', 'neutral-inverted'] as const;
-export type ButtonVariant = (typeof ButtonVariants)[number];
 
 const variants = cva<{
     size: Record<ButtonSize, string>;
@@ -14,18 +16,21 @@ const variants = cva<{
 }>(
     [
         'group relative isolate flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
-        'disabled:cursor-default disabled:bg-transparent disabled:text-on-surface-0/30',
+        'disabled:cursor-not-allowed disabled:bg-transparent disabled:text-on-surface-0/25',
     ],
     {
         variants: {
             size: {
-                md: 'h-10 text-sm rounded-md',
-                sm: 'h-8 text-xs rounded-sm',
-                xs: 'h-7 text-xs rounded-sm',
+                md: 'h-10 px-4 text-sm rounded-md',
+                sm: 'h-8 px-4 text-xs rounded-sm',
+                xs: 'h-7 px-3 text-xs rounded-sm',
             },
             variant: {
-                neutral: 'text-on-surface-0',
-                'neutral-inverted': 'text-surface-0',
+                danger: 'hover:bg-danger/10 active:bg-danger/15 text-danger',
+                neutral: 'hover:bg-on-surface-0/10 active:bg-on-surface-0/15 text-on-surface-0',
+                'neutral-inverted':
+                    'hover:bg-surface-0/10 active:bg-surface-0/15 text-surface-0 disabled:text-surface-0/25',
+                primary: 'hover:bg-primary/10 active:bg-primary/15 text-primary',
             },
         },
         defaultVariants: {
@@ -43,21 +48,19 @@ type GhostButtonProps = {
 } & Omit<React.ComponentProps<'button'>, 'children'> &
     VariantProps<typeof variants>;
 
-export const GhostButton = (props: GhostButtonProps) => {
-    const contentLayoutClassName: Record<string, string> = {
-        xs: 'gap-1 pr-3 pl-2',
-        sm: 'gap-1 pr-4 pl-3',
-        md: 'gap-2 pr-5 pl-4',
-    };
-
-    const iconSize: Record<string, React.ComponentProps<typeof Icon>['size']> = {
-        xs: 'xs',
-        sm: 'sm',
-        md: 'md',
-    };
+export const GhostButton = ({
+    text,
+    icon,
+    loading,
+    ref,
+    variant,
+    size,
+    ...props
+}: GhostButtonProps) => {
+    const iconSize = ButtonIconSize[size ?? 'md'];
 
     const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (props.disabled || props.loading) {
+        if (props.disabled || loading) {
             return;
         }
 
@@ -67,43 +70,30 @@ export const GhostButton = (props: GhostButtonProps) => {
     return (
         <button
             {...props}
+            ref={ref}
             type={props.type ?? 'button'}
-            title={props.title ?? props.text}
-            disabled={props.disabled || props.loading}
+            title={props.title ?? text}
+            disabled={props.disabled || loading}
             onClick={handleOnClick}
             className={cn(
-                variants({
-                    size: props.size,
-                    variant: props.variant,
-                    className: props.className,
-                }),
-                props.icon && props.text && contentLayoutClassName[props.size ?? 'md'],
-                props.icon && !props.text && 'aspect-square',
-                !props.icon && props.text && 'px-5',
+                variants({ size, variant, className: props.className }),
+                icon && text && ButtonContentLayoutClassName[size ?? 'md'],
+                icon && !text && 'aspect-square p-0',
                 props.className
             )}
         >
-            {props.icon ? (
-                <Icon
-                    icon={props.icon}
-                    size={iconSize[props.size ?? 'md']}
-                    className={cn(props.loading && 'opacity-0')}
-                />
+            {icon ? (
+                <Icon icon={icon} size={iconSize} className={cn(loading && 'opacity-0')} />
             ) : null}
-            {props.text ? (
-                <span className={cn('truncate font-medium', props.loading && 'opacity-0')}>
-                    {props.text}
-                </span>
+            {text ? (
+                <span className={cn('truncate font-medium', loading && 'opacity-0')}>{text}</span>
             ) : null}
-            {props.loading ? (
+            {loading ? (
                 <Icon
                     icon={LoaderIcon}
-                    size={iconSize[props.size ?? 'md']}
+                    size={iconSize}
                     className="absolute top-1/2 left-1/2 z-1 -translate-x-1/2 -translate-y-1/2 animate-spin"
                 />
-            ) : null}
-            {!props.disabled && !props.loading ? (
-                <div className="absolute inset-0 -z-1 group-hover:bg-current/10 group-active:bg-current/15"></div>
             ) : null}
         </button>
     );
