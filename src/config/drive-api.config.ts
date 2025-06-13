@@ -5,6 +5,8 @@ type DriveApiEndpoints = {
 type DriveApiConfig = {
     baseUrl: string;
     endpoints: DriveApiEndpoints;
+    maxFileSizeInMB: number;
+    allowedFileTypes: string[];
 };
 
 export const DriveApiConfig: DriveApiConfig = {
@@ -12,4 +14,6 @@ export const DriveApiConfig: DriveApiConfig = {
     endpoints: {
         albums: '/albums',
     },
+    maxFileSizeInMB: 10,
+    allowedFileTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
 };

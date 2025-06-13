@@ -8,18 +8,19 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ImageInput } from '@components/input/image-input';
+import { DriveApiConfig } from '@config/drive-api.config';
 
-const MAX_FILE_SIZE_MB = 5;
-const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
-const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ALLOWED_FILE_TYPES = DriveApiConfig.allowedFileTypes;
+const MAX_FILE_SIZE_IN_MEGABYTES = DriveApiConfig.maxFileSizeInMB;
+const MAX_FILE_SIZE_IN_BYTES = MAX_FILE_SIZE_IN_MEGABYTES * 1024 * 1024;
 
 const fileSchema = z
     .instanceof(File)
     .refine(
-        (file) => file.size <= MAX_FILE_SIZE_BYTES,
-        `Maksymalny rozmiar pliku: ${String(MAX_FILE_SIZE_MB)}MB`
+        (file) => file.size <= MAX_FILE_SIZE_IN_BYTES,
+        `Maksymalny rozmiar pliku: ${String(MAX_FILE_SIZE_IN_MEGABYTES)}MB`
     )
-    .refine((file) => ALLOWED_IMAGE_TYPES.includes(file.type), 'Niepoprawy rodzaj pliku');
+    .refine((file) => ALLOWED_FILE_TYPES.includes(file.type), 'Niepoprawy rodzaj pliku');
 
 const createAlbumSchema = z.object({
     title: z.string().min(1),
@@ -73,8 +74,8 @@ export const CreateAlbumDialog = () => {
                                         id="files"
                                         placeholder="Dodaj zdjęcia"
                                         multiple
-                                        max={MAX_FILE_SIZE_BYTES}
-                                        accept={ALLOWED_IMAGE_TYPES.join(',')}
+                                        max={MAX_FILE_SIZE_IN_BYTES}
+                                        accept={ALLOWED_FILE_TYPES.join(',')}
                                         onValueChange={field.onChange}
                                     />
                                 </FormFieldset>
