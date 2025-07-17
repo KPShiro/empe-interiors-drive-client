@@ -6,6 +6,7 @@ import { EllipsisVerticalIcon } from 'lucide-react';
 
 type AlbumCardMenuProps = {
     albumId: string;
+    albumTitle: string;
 };
 
 export const AlbumCardMenu = (props: AlbumCardMenuProps) => {
@@ -17,7 +18,7 @@ export const AlbumCardMenu = (props: AlbumCardMenuProps) => {
             <DropdownMenu.Trigger asChild>
                 <GhostButton
                     icon={EllipsisVerticalIcon}
-                    variant="neutral-inverted"
+                    variant="neutral"
                     className="backdrop-blur-md"
                 />
             </DropdownMenu.Trigger>
@@ -31,7 +32,12 @@ export const AlbumCardMenu = (props: AlbumCardMenuProps) => {
                     <DropdownMenu.Item
                         icon={deleteAlbumAction.icon}
                         label={deleteAlbumAction.label}
-                        onClick={() => deleteAlbumAction.execute(props.albumId)}
+                        onClick={() =>
+                            deleteAlbumAction.execute({
+                                albumId: props.albumId,
+                                albumTitle: props.albumTitle,
+                            })
+                        }
                     />
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

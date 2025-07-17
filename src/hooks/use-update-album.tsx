@@ -1,50 +1,42 @@
-import { DriveApiConfig } from '@config/drive-api.config';
-import { Album } from '@models/album';
+import { DriveService } from '@services/drive';
+import { UpdateAlbumParams } from '@services/drive/update-album';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetcher } from '@utils/fetcher';
-
-export type UpdateAlbumParms = {
-    albumId: Album['id'];
-    update: Pick<Album, 'title'>;
-};
-
-function updateAlbum(
-    albumId: UpdateAlbumParms['albumId'],
-    update: UpdateAlbumParms['update']
-): Promise<void> {
-    const url: Parameters<typeof fetcher>[0] =
-        `${DriveApiConfig.baseUrl}${DriveApiConfig.endpoints.albums}/${albumId}`;
-
-    const options: Parameters<typeof fetcher>[1] = {
-        method: 'PATCH',
-        body: JSON.stringify(update),
-    };
-
-    return fetcher(url, options);
-}
+import { useRouter } from '@tanstack/react-router';
 
 export type UseUpdateAlbumOptions = {
+    onMutate?: () => void;
     onSuccess?: () => void;
     onError?: (error: Error) => void;
+    onSettled?: () => void;
 };
 
 export const useUpdateAlbum = (options: UseUpdateAlbumOptions = {}) => {
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     return useMutation({
-        mutationFn: (params: UpdateAlbumParms) => {
-            return updateAlbum(params.albumId, params.update);
+        mutationFn: (params: UpdateAlbumParams) => {
+            return DriveService.updateAlbum(params);
+        },
+        onMutate: () => {
+            options.onMutate?.();
         },
         onSuccess: async (_, variables) => {
-            await queryClient.invalidateQueries({ queryKey: ['albums'], exact: true });
-            await queryClient.invalidateQueries({
-                queryKey: ['albums', variables.albumId],
-                exact: true,
-            });
+            await Promise.allSettled([
+                queryClient.invalidateQueries({ queryKey: ['albums'], exact: true }),
+                queryClient.invalidateQueries({
+                    queryKey: ['albums', variables.albumId],
+                    exact: true,
+                }),
+                router.invalidate(),
+            ]);
             options.onSuccess?.();
         },
         onError: (error) => {
             options.onError?.(error);
+        },
+        onSettled: () => {
+            options.onSettled?.();
         },
     });
 };

@@ -18,13 +18,15 @@ export const SelectTrigger = (props: SelectTriggerProps) => {
                 props.className
             )}
         >
-            <RadixSelect.Value
-                placeholder={
-                    <div className="text-on-surface-0-variant">
-                        {props.placeholder ?? 'Select item'}
-                    </div>
-                }
-            />
+            <div className="min-w-0">
+                <RadixSelect.Value
+                    placeholder={
+                        <div className="text-on-surface-0-variant">
+                            {props.placeholder ?? 'Select item'}
+                        </div>
+                    }
+                />
+            </div>
             <RadixSelect.Icon asChild>
                 <Icon icon={ChevronDownIcon} />
             </RadixSelect.Icon>

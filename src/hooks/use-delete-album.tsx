@@ -1,35 +1,42 @@
-import { DriveApiConfig } from '@config/drive-api.config';
-import { Album } from '@models/album';
+import { DriveService } from '@services/drive';
+import { DeleteAlbumParams } from '@services/drive/delete-album';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetcher } from '@utils/fetcher';
-
-function deleteAlbum(albumId: Album['id']): Promise<void> {
-    const url: Parameters<typeof fetcher>[0] =
-        `${DriveApiConfig.baseUrl}${DriveApiConfig.endpoints.albums}/${albumId}`;
-
-    const options: Parameters<typeof fetcher>[1] = {
-        method: 'DELETE',
-    };
-
-    return fetcher(url, options);
-}
+import { useRouter } from '@tanstack/react-router';
 
 export type UseDeleteAlbumOptions = {
+    onMutate?: () => void;
     onSuccess?: () => void;
     onError?: (error: Error) => void;
+    onSettled?: () => void;
 };
 
 export const useDeleteAlbum = (options: UseDeleteAlbumOptions = {}) => {
     const queryClient = useQueryClient();
+    const router = useRouter();
 
     return useMutation({
-        mutationFn: (albumId: string) => deleteAlbum(albumId),
-        onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['albums'], exact: true });
+        mutationFn: (params: DeleteAlbumParams) => {
+            return DriveService.deleteAlbum(params);
+        },
+        onMutate: () => {
+            options.onMutate?.();
+        },
+        onSuccess: async (_, params) => {
+            await Promise.allSettled([
+                queryClient.invalidateQueries({ queryKey: ['albums'], exact: true }),
+                queryClient.invalidateQueries({
+                    queryKey: ['albums', params.albumId],
+                    exact: true,
+                }),
+                router.invalidate(),
+            ]);
             options.onSuccess?.();
         },
         onError: (error) => {
             options.onError?.(error);
+        },
+        onSettled: () => {
+            options.onSettled?.();
         },
     });
 };

@@ -1,5 +1,5 @@
-import * as Dialog from '@components/dialog';
-import { UpdateAlbumDialog } from './update-album-dialog';
+import { Dialog } from '@components/dialog';
+import { UpdateAlbumForm } from './update-album-form';
 import { useState } from 'react';
 import { TonalButton } from '@components/button/tonal-button';
 import { useUpdateAlbumAction } from '@hooks/use-update-album-action';
@@ -14,11 +14,16 @@ export const UpdateAlbumButton = ({ album }: UpdateAlbumButtonProps) => {
     const updateAlbumAction = useUpdateAlbumAction();
 
     return (
-        <Dialog.Root open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <Dialog.Trigger asChild>
                 <TonalButton icon={updateAlbumAction.icon} text={updateAlbumAction.label} />
             </Dialog.Trigger>
-            {isDialogOpen ? <UpdateAlbumDialog album={album} /> : null}
-        </Dialog.Root>
+            <Dialog.Content aria-describedby={undefined}>
+                <Dialog.Header title="Edycja Albumu" />
+                <Dialog.Container>
+                    <UpdateAlbumForm album={album} afterSubmit={() => setIsDialogOpen(false)} />
+                </Dialog.Container>
+            </Dialog.Content>
+        </Dialog>
     );
 };

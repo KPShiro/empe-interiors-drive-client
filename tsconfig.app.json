@@ -14,6 +14,7 @@
             "@hooks/*": ["./src/hooks/*"],
             "@models/*": ["./src/models/*"],
             "@utils/*": ["./src/utils/*"],
+            "@services/*": ["./src/services/*"],
             "@state/*": ["./src/state/*"]
             // Add more paths here...
         },

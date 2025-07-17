@@ -1,45 +1,41 @@
-import { DriveApiConfig } from '@config/drive-api.config';
-import { Album, AlbumImage } from '@models/album';
-import { useMutation } from '@tanstack/react-query';
-import { fetcher } from '@utils/fetcher';
-
-export type ReorderImagesParms = {
-    albumId: Album['id'];
-    imageIds: AlbumImage['id'][];
-};
-
-function reorderImages(
-    albumId: ReorderImagesParms['albumId'],
-    imageIds: ReorderImagesParms['imageIds']
-): Promise<void> {
-    const url: Parameters<typeof fetcher>[0] =
-        `${DriveApiConfig.baseUrl}${DriveApiConfig.endpoints.albums}/${albumId}/reorder-images`;
-
-    const options: Parameters<typeof fetcher>[1] = {
-        method: 'PATCH',
-        body: {
-            imageIds,
-        },
-    };
-
-    return fetcher(url, options);
-}
+import { DriveService } from '@services/drive';
+import { ReorderImagesParams } from '@services/drive/reorder-images';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 
 export type UseReorderImagesOptions = {
+    onMutate?: () => void;
     onSuccess?: () => void;
     onError?: (error: Error) => void;
+    onSettled?: () => void;
 };
 
 export const useReorderImages = (options: UseReorderImagesOptions = {}) => {
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
     return useMutation({
-        mutationFn: (params: ReorderImagesParms) => {
-            return reorderImages(params.albumId, params.imageIds);
+        mutationFn: (params: ReorderImagesParams) => {
+            return DriveService.reorderImages(params);
         },
-        onSuccess: () => {
+        onMutate: () => {
+            options.onMutate?.();
+        },
+        onSuccess: async (_, variables) => {
+            await Promise.allSettled([
+                queryClient.invalidateQueries({
+                    queryKey: ['albums', variables.albumId],
+                    exact: true,
+                }),
+                router.invalidate(),
+            ]);
             options.onSuccess?.();
         },
         onError: (error) => {
             options.onError?.(error);
+        },
+        onSettled: () => {
+            options.onSettled?.();
         },
     });
 };

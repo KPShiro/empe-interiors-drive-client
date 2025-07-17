@@ -4,12 +4,6 @@ import { SelectItem } from './item';
 import { SelectContent } from './content';
 import { SelectSeparator } from './separator';
 
-type SelectItem = {
-    value: string;
-    label: string;
-    disabled?: boolean;
-};
-
 type SelectProps = RadixSelect.SelectProps &
     Pick<React.ComponentProps<typeof SelectTrigger>, 'placeholder'> &
     Pick<RadixSelect.SelectPortalProps, 'container'>;

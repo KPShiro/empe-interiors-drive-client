@@ -3,7 +3,7 @@
 interface ImportMetaEnv {
     readonly VITE_ENV: 'development' | 'production';
     readonly VITE_TITLE: string;
-    readonly VITE_API_URL: string;
+    readonly VITE_DRIVE_SERVICE_URL: string;
     // more env variables...
 }
 

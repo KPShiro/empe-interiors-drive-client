@@ -15,7 +15,7 @@ const variants = cva<{
     variant: Record<ButtonVariant, string>;
 }>(
     [
-        'group relative isolate flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
+        'group relative flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
         'disabled:cursor-not-allowed disabled:bg-on-surface-0/5 disabled:text-on-surface-0/25',
     ],
     {
@@ -26,12 +26,12 @@ const variants = cva<{
                 xs: 'h-7 px-3 text-xs rounded-sm',
             },
             variant: {
-                danger: 'bg-danger/10 hover:bg-danger/15 active:bg-danger/25 text-danger',
+                danger: 'bg-danger/15 hover:bg-danger/20 active:bg-danger/25 text-danger',
                 neutral:
-                    'bg-on-surface-0/10 hover:bg-on-surface-0/15 active:bg-on-surface-0/20 text-on-surface-0',
+                    'bg-on-surface-0/15 hover:bg-on-surface-0/20 active:bg-on-surface-0/25 text-on-surface-0',
                 'neutral-inverted':
-                    'bg-surface-0/10 hover:bg-surface-0/15 active:bg-surface-0/25 text-surface-0 disabled:bg-surface-0/5 disabled:text-surface-0/25',
-                primary: 'bg-primary/10 hover:bg-primary/15 active:bg-primary/20 text-primary',
+                    'bg-surface-0/15 hover:bg-surface-0/20 active:bg-surface-0/25 text-surface-0 disabled:bg-surface-0/5 disabled:text-surface-0/25',
+                primary: 'bg-primary/15 hover:bg-primary/20 active:bg-primary/25 text-primary',
             },
         },
         defaultVariants: {

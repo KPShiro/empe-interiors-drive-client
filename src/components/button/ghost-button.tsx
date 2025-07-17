@@ -15,7 +15,7 @@ const variants = cva<{
     variant: Record<ButtonVariant, string>;
 }>(
     [
-        'group relative isolate flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
+        'group relative flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
         'disabled:cursor-not-allowed disabled:bg-transparent disabled:text-on-surface-0/25',
     ],
     {

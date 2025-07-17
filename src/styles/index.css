@@ -1,6 +1,33 @@
 @import 'tailwindcss';
 @import 'theme.css';
 
+@theme {
+    --animate-toastSlideIn: toastSlideIn 0.25s ease-out;
+    --animate-toastSlideOut: toastSlideOut 0.25s ease-in;
+
+    @keyframes toastSlideIn {
+        0% {
+            transform: translateX(110%);
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes toastSlideOut {
+        0% {
+            transform: translateX(var(--radix-toast-swipe-end-x), 0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(110%);
+            opacity: 0;
+        }
+    }
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still

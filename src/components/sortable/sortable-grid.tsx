@@ -1,3 +1,4 @@
+import { Grid } from '@components/grid';
 import {
     closestCenter,
     DndContext,
@@ -20,7 +21,7 @@ type SortableGridProps<T> = Pick<React.ComponentProps<'div'>, 'children'> & {
     itemIdKey: keyof T;
     itemsKeys: UniqueIdentifier[];
     onListSorted: (sortedItems: T[]) => void;
-};
+} & React.ComponentProps<typeof Grid>;
 
 export function SortableGrid<T>({
     items,
@@ -28,6 +29,7 @@ export function SortableGrid<T>({
     itemsKeys,
     onListSorted,
     children,
+    className,
 }: SortableGridProps<T>) {
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -49,10 +51,16 @@ export function SortableGrid<T>({
     };
 
     return (
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-            <SortableContext items={itemsKeys} strategy={rectSortingStrategy}>
-                {children}
-            </SortableContext>
-        </DndContext>
+        <Grid className={className}>
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+            >
+                <SortableContext items={itemsKeys} strategy={rectSortingStrategy}>
+                    {children}
+                </SortableContext>
+            </DndContext>
+        </Grid>
     );
 }

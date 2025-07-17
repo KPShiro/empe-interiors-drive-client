@@ -1,29 +1,40 @@
 @theme {
     /* Ref Tokens */
     /* Add primary/atomic Design Tokens here */
+    --color-primary-50: var(--color-purple-50);
+    --color-primary-100: var(--color-purple-100);
+    --color-primary-200: var(--color-purple-200);
+    --color-primary-300: var(--color-purple-300);
+    --color-primary-400: var(--color-purple-400);
+    --color-primary-500: var(--color-purple-500);
+    --color-primary-600: var(--color-purple-600);
+    --color-primary-700: var(--color-purple-700);
+    --color-primary-800: var(--color-purple-800);
+    --color-primary-900: var(--color-purple-900);
+    --color-primary-950: var(--color-purple-950);
 
     /* System Tokens */
-    --color-primary: var(--color-violet-700);
-    --color-on-primary: var(--color-white);
+    --color-primary: var(--color-primary-400);
+    --color-on-primary: var(--color-primary-950);
 
-    --color-danger: var(--color-red-500);
-    --color-on-danger: var(--color-white);
+    --color-danger: var(--color-red-400);
+    --color-on-danger: var(--color-red-800);
 
     --color-warning: var(--color-yellow-400);
-    --color-on-warning: var(--color-yellow-950);
+    --color-on-warning: var(--color-yellow-800);
 
-    --color-success: var(--color-green-500);
-    --color-on-success: var(--color-green-950);
+    --color-success: var(--color-green-400);
+    --color-on-success: var(--color-green-800);
 
-    --color-surface-0: var(--color-gray-200);
-    --color-on-surface-0: var(--color-gray-800);
-    --color-on-surface-0-variant: var(--color-gray-400);
+    --color-surface-0: var(--color-zinc-900);
+    --color-on-surface-0: var(--color-zinc-100);
+    --color-on-surface-0-variant: var(--color-zinc-400);
 
-    --color-surface-1: var(--color-gray-100);
-    --color-on-surface-1: var(--color-gray-800);
-    --color-on-surface-1-variant: var(--color-gray-400);
+    --color-surface-1: var(--color-zinc-800);
+    --color-on-surface-1: var(--color-on-surface-0);
+    --color-on-surface-1-variant: var(--color-on-surface-0-variant);
 
-    --color-border: var(--color-gray-300);
+    --color-border: var(--color-zinc-700);
 
     /* Component Tokens */
     --border-color-default: var(--color-border);

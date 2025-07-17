@@ -15,7 +15,7 @@ const variants = cva<{
     variant: Record<ButtonVariant, string>;
 }>(
     [
-        'group relative isolate flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
+        'group relative flex w-fit items-center justify-center rounded-md cursor-pointer overflow-clip',
         'disabled:cursor-not-allowed disabled:bg-on-surface-0/5 disabled:text-on-surface-0/25',
     ],
     {
@@ -27,9 +27,9 @@ const variants = cva<{
             },
             variant: {
                 danger: 'bg-danger text-on-danger',
-                neutral: 'bg-on-surface-0 text-surface-0',
+                neutral: 'bg-on-surface-1 text-surface-1',
                 'neutral-inverted':
-                    'bg-surface-0 text-on-surface-0 disabled:bg-surface-0/5 disabled:text-surface-0/25',
+                    'bg-surface-1 text-on-surface-1 disabled:bg-surface-1/5 disabled:text-surface-1/25',
                 primary: 'bg-primary text-on-primary',
             },
         },

@@ -23,6 +23,7 @@ export default defineConfig({
             '@hooks': path.resolve(__dirname, './src/hooks'),
             '@models': path.resolve(__dirname, './src/models'),
             '@utils': path.resolve(__dirname, './src/utils'),
+            '@services': path.resolve(__dirname, './src/services'),
             '@state': path.resolve(__dirname, './src/state'),
             // Add more path aliases here, just remember to add them to the tsconfing as well...
         },
